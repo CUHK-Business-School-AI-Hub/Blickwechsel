@@ -72,7 +72,7 @@ unzip teaching-with-ai.zip -d ~/.claude/skills/
 Or clone this repository and copy the skill folder across:
 
 ```
-git clone https://github.com/qizhangacct/Blickwechsel
+git clone https://github.com/CUHK-Business-School-AI-Hub/Blickwechsel
 cp -r Blickwechsel/teaching-with-ai ~/.claude/skills/
 ```
 
