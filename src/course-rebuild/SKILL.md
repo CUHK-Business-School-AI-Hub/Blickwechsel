@@ -1,0 +1,318 @@
+---
+name: course-rebuild
+description: Answer the findings from a course audit with concrete proposals, then build what the lecturer chooses. Use after course-audit, or when a teacher wants to make a lecture more interactive, turn slide questions into activities students actually answer, build practice datasets that rotate each year, write speaker notes another teacher could use, rewrite exam questions AI can now answer in a minute, or change the slide file itself. Offers two or three formats for each problem and lets the lecturer pick rather than choosing silently. Also use for "make this more engaging", "I need a new version of this dataset", or "how do I assess this now that ChatGPT exists".
+---
+
+# Course rebuild
+
+Answer the audit's findings. Propose options, let the lecturer choose, then
+build the chosen thing.
+
+This skill does **not** work through a checklist. It works through a list of
+problems somebody has already accepted.
+
+## Start from accepted findings
+
+`course-audit` ends by numbering its findings and asking the lecturer to mark
+each **accept / reject / change**. Work only on the accepted ones.
+
+If you were not handed that list, ask for it before proposing anything. If
+there was no audit, say so and ask for three things instead — you cannot infer
+any of them:
+
+- the topic students get wrong every year, however it is taught
+- what happens in class that is not written in the file
+- what a graduate should still be able to do in five years
+
+**Never work on a finding the lecturer rejected**, and never re-propose it
+later in a different shape. If a rejection looks like a mistake, say so once,
+briefly, and move on.
+
+## Two rules through everything below
+
+**Assume every student has an AI assistant.** Not "might have". Never rely on a
+rule telling them not to use one, and build tasks that make them better at
+using it rather than tasks that pretend it is absent.
+
+**Plain words for the wrapping, the subject's own words for the subject.**
+Briefs, instructions and notes read simply. Technical terms stay exactly as the
+course uses them — students must leave able to use them, and the examiner
+expects them.
+
+---
+
+## Step 1 — Propose, do not decide
+
+For each accepted finding, offer **two or three ways to fix it**, each with a
+one-line trade-off, and let the lecturer choose. Do not pick silently, and do
+not offer only the format you happen to like.
+
+`reference/activities.md` holds twenty-eight classroom formats in eight
+families, with what each is good for, how long it takes, and what goes wrong.
+Read it before proposing. It also has a table mapping common audit findings to
+the families worth reaching for.
+
+A proposal for one finding looks like this:
+
+> **Finding 4** — slides 10–13 state the definitions, then slide 13 asks which
+> range to choose, with no numbers on the slide to answer with.
+>
+> - **Make the call** (12–18 min) — give the three price plans and ask which
+>   they would sign, before any definition. They derive the distinction because
+>   they need it. *Costs the most time; teaches the most.*
+> - **Four options, one right** (5–8 min) — keep the slides, add a committed
+>   answer on slide 13. *Cheapest change; leaves the ordering problem in place.*
+> - **Predict, then run it** (6–10 min) — predict which plan wins at 2,000
+>   hours, then show the table. *Middle ground; needs the table built.*
+
+Say which you would choose and why, in one sentence, then stop and wait.
+
+**Do not build more than about four activities for one session.** A lecture of
+activities is as tiring as a lecture of slides. If the audit accepted more
+findings than that, say which you would leave for next year.
+
+## Step 2 — Build the activity
+
+For each activity the lecturer chose, produce:
+
+- the question exactly as students will see it
+- the answer options, where the format has them
+- **for every wrong option, the specific misunderstanding it represents, named**
+- how long it takes
+- the exact words the teacher says to start it
+- two sentences to say afterwards, connecting the result to the five-year skill
+
+Rules:
+
+- Students must be able to answer from material already in the course. Invent
+  no new content.
+- Say so if it would realistically run over ten minutes.
+- Say so if you cannot write a wrong option a real student would pick. That
+  means the question is not worth an activity — better to drop it than fake it.
+- Aim for one activity in the session with **no clean right answer**.
+
+The lecturer rewrites the closing two sentences in their own words. Tell them
+to. A debrief line in your voice sounds wrong in the room and students notice.
+
+## Step 3 — Build the data
+
+If the topic has numbers, run the bundled script rather than inventing values:
+
+```
+python scripts/make_variants.py their_data.csv --x driver_column --y cost_column
+```
+
+On Windows use `py -X utf8`. It produces the same shape with different numbers
+for each year group, plus four harder versions:
+
+- an odd observation that is **genuine** — keep it
+- the **same numbers** caused by a data-entry mistake — correct it. The pair is
+  the point: nothing in the spreadsheet distinguishes them, only the story you
+  hand out. Give half the room each version and let them argue.
+- a rival driver that **fits better and causes nothing**
+- values past a step change, where a line fitted on the normal range breaks,
+  and where fitting one line across everything reports a *better* statistic
+  than the honest model
+
+The script prints the fits so you can see whether each version teaches what it
+should. **If it warns that the rival driver does not fit better, the exercise
+does not work yet** — adjust and run again rather than shipping it. This is the
+single most common way a generated exercise ships broken, and it reads
+perfectly well either way.
+
+**If you cannot run it.** The script needs only Python, nothing else. If even
+that is unavailable, build the variants by hand — but you then have no printed
+check that the trap works, so say so plainly and ask the lecturer to verify the
+one thing that matters: that the rival driver really does fit better than the
+honest one.
+
+For a topic without numbers, build the same four shapes out of documents: a
+genuine exception, an identical-looking error, a plausible but wrong
+justification, and a case outside the range the rule was written for.
+
+Then have the lecturer check every version against their own industry. A defect
+nobody would ever meet teaches suspicion, not judgement.
+
+## Step 4 — The audit exercise: use the case skill
+
+If the chosen fix is "students judge a finished piece of work" — the format
+this pack cares most about — **do not design it here. Use `case-authoring`.**
+
+That skill carries the design rules this one used to restate badly: one concept
+per case, data authored so untaught errors cannot happen, the failure in the
+conclusion rather than the arithmetic, **at most one numeric error**, claims
+that are not all problematic so blanket suspicion scores nothing, and critique
+before instruction with a one-way commit. Its companion file,
+`case-authoring/BUILDING.md`, has the folder that makes it run and the rule that
+the marking scheme never ships.
+
+Come back here once it exists, to fit it into the session's timing.
+
+## Step 5 — Write the speaker notes
+
+Notes another teacher could teach from.
+
+- Match the tone of any notes already there.
+- Where a note says "draw on the tablet" or anything like it, write out what is
+  drawn and why it matters, and mark it `[DRAW LIVE]` so it stays a live
+  moment. **Do not convert it into a picture. This is the most common way an AI
+  quietly makes a lecture worse.**
+- Add nothing that is not already in the material.
+- Say which slides you could not work out the point of. Usually the point
+  really is missing.
+
+## Step 6 — Rewrite the assessment
+
+Only if the assessment belongs to this lecturer. If it is shared across
+sections, produce a one-page proposal for whoever owns it instead, and say so.
+
+For each existing question, say whether a student with an AI assistant could
+answer it in under five minutes. Where the answer is yes, write a replacement
+testing the same topic that cannot be answered that way. The reliable pattern:
+**give the student a finished answer produced by someone else and ask them to
+decide whether to accept it, and why.**
+
+Use the misunderstandings named in Step 2 as the wrong options. Keep the same
+marks and roughly the same length.
+
+Do not stop at making questions AI-resistant. **At least one assessed task
+should require students to use AI and be marked on how well they directed it**
+— the prompt they wrote and why, what they accepted, what they rejected and on
+what grounds. Family 8 in `reference/activities.md` has four formats for this.
+
+## Step 7 — Change the actual files
+
+Only when the lecturer asks. Until then everything above is a specification
+they apply themselves.
+
+**Use a document skill if one is available.** If the environment has a `pptx`
+or equivalent document skill, use it for the file mechanics — it handles the
+format properly and this skill should not be maintaining a PowerPoint writer.
+Otherwise fall back to `python-pptx`.
+
+**Edit their original file. Never build a new one.** The photographs, charts,
+theme colours and slide master are the lecturer's, and rebuilding loses all of
+them.
+
+**Structural operations only.** These cannot break a layout, because nothing is
+re-laid-out:
+
+- delete a slide that repeats the one before it
+- reorder slides
+- merge a build sequence into one slide
+- replace the body text of an existing slide
+- write speaker notes
+- duplicate an existing slide as the base for a new one
+
+**New content goes on the deck's own layout**, with conservative sizing, and
+never more than will fit. A table with six columns of prose will overflow and
+you cannot see that it has.
+
+**Check the geometry, then say what you still cannot check.** A lot of what
+goes wrong is measurable, because shape positions are in the file:
+
+```
+python scripts/check_deck.py new.pptx --against original.pptx
+```
+
+It refuses if a shape now runs off the edge of a slide, warns about empty
+placeholders, tables that reach the bottom, type under 10pt and boxes with more
+text than they will hold — and, given `--against`, separates what **this edit**
+broke from what the original was already like. A gate that blocks on somebody
+else's pre-existing mess is a gate people learn to ignore.
+
+**If you cannot run it.** `check_deck.py` needs `python-pptx`, which is also
+what edits the file in the first place — so if you got this far you have it. If
+you edited a `.tex` instead, there is nothing to check geometrically; say so.
+
+Then say plainly what it does **not** cover, because that part is real: whether
+a slide reads well, line breaks in awkward places, a table that fits but nobody
+can follow, a colour that disappears on a projector. Tell the lecturer to open
+the deck, and say which slides to look at first.
+
+For **LaTeX**, edit the source; it is text and this is safe. For **PDF**, do not
+attempt to edit — regenerate from the source if there is one, otherwise leave
+it and hand back a specification.
+
+Always keep the original. Write to a new filename.
+
+## Step 8 — Write the summary of what changed
+
+**This is the deliverable.** Everything above is working; this is what the
+lecturer actually reads, and usually the only part a colleague ever sees. It is
+also the step most likely to be skipped, because by now the work feels done.
+
+**Aim for about 1,700 words, most of it in tables.** Not slide by slide —
+nobody wants a diff. What was added, what it replaced, and why.
+
+Seven sections, in this order:
+
+**If you read nothing else.** One paragraph. What is unchanged, what moved, and
+the net effect on time. If they stop reading here they should still know what
+happened to their lecture.
+
+**The three facts behind every change.** Three or four bullets, measured numbers
+carried over from the audit. This is what stops the changes reading as taste.
+
+**What changed.** A two-column before / after table — slides, what the session
+opens with, minutes spent watching against doing. Six rows at most.
+
+**What was added, and why.** *Added | Replaces | Why*. One row per new thing.
+The Why column is the one that gets read: make it a reason, not a description
+of the activity.
+
+**Where the time comes from.** Every addition, and what was compressed to pay
+for it. The total must come to zero or less. If it does not, you have quietly
+made the session longer, and that is the change most likely to be reversed in
+the room.
+
+**Also built, if useful.** *Thing | What it is.* The dataset variants, the
+answer key, the notes — things they did not ask for and may not want. Keep it
+to a list; anything needing explanation belongs above.
+
+**What I need from you.** *What was assumed | Why it matters*, as a table, with
+the same discipline as the audit: assumptions that carry a consequence, sorted
+by consequence, never a questionnaire.
+
+**What was deliberately not touched.** Prose, and do not skip this. The story
+they always tell, the thing drawn live on the tablet, whatever they said happens
+in the room that is not in the file. Naming it is how it stops being invisible,
+and it is the section that earns their trust in all the others.
+
+## Before you hand anything back
+
+Read all of it again as a student who does not yet know the answer:
+
+- Do I know what I am supposed to do?
+- Can I answer this with what I have been given?
+- Does the order make sense if I am meeting this for the first time?
+- If I get it wrong, does anything tell me why?
+
+Most material is written in the order the teacher knows it, not the order a
+student learns it. This pass catches the activity with no way in, the brief
+that assumes a file nobody sent, and the question whose answer appeared two
+slides earlier. Do it before showing the lecturer, not after.
+
+## Decisions that are never yours
+
+State these back rather than deciding them:
+
+- which format to use, where you offered a choice
+- whether each wrong option is one real students actually give
+- which mistake goes in an audit exercise
+- what stays AI-free
+- the words said out loud in the room
+- anything affecting a grade
+
+## Common failures
+
+- Working on a finding the lecturer rejected, or re-proposing it in disguise.
+- Choosing a format silently instead of offering two or three.
+- Proposing eight activities for one session.
+- Designing an audit exercise here instead of using `case-authoring`.
+- Rebuilding a deck from scratch and losing the lecturer's own charts.
+- Shipping a dataset whose trap does not work, because the script's warning was
+  not read.
+- Handing back the material with no summary of what changed, so the lecturer
+  has to diff two decks to find out.
+- Writing that summary slide by slide. They asked what changed, not where.

@@ -1,0 +1,43 @@
+name: skill matches src
+
+# teaching-with-ai/ is generated from src/. Someone who edits the generated
+# copy sees their change work, and then loses it silently the next time anyone
+# runs the build. This catches that on the push rather than weeks later.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Rebuild the skill from src/
+        env:
+          PYTHONIOENCODING: utf-8
+        run: python build_package.py
+
+      - name: Fail if the committed skill is not what src/ produces
+        run: |
+          if git diff --quiet -- teaching-with-ai/; then
+            echo "The committed skill matches src/."
+            exit 0
+          fi
+          echo "::error::teaching-with-ai/ is not what src/ produces."
+          echo ""
+          echo "That folder is generated. If you edited it directly, your change"
+          echo "will be deleted by the next build. Edit the matching file under"
+          echo "src/ instead, then run:"
+          echo ""
+          echo "    python build_package.py"
+          echo ""
+          echo "and commit both. What differs:"
+          git --no-pager diff --stat -- teaching-with-ai/
+          exit 1

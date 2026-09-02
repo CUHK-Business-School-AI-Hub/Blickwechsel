@@ -1,0 +1,312 @@
+---
+name: course-audit
+description: Work out what a piece of teaching material is for, what is really in it, and where it falls short from a student's point of view. Use when someone shares a lecture in PowerPoint, PDF or LaTeX, a notebook, a syllabus, an assignment or a whole course folder and wants to know what to improve, what is worth keeping, or which parts an AI tool has made easy for students. Establishes the topic and the core objective first, then measures the file, then reads it as somebody who does not yet know the answer. Hands over a short written verdict, the evidence behind it, numbered findings the lecturer marks accept, reject or change, and last a table of what had to be assumed, which is what course-rebuild then works from. Also use for "is my course still fit for purpose", "what should I update", or "where is AI a problem in this course".
+---
+
+# Course audit
+
+Find out what the material is *for*, what is really in it, and where a student
+would come unstuck. Propose changes only once the looking is done.
+
+## Three rules that govern everything below
+
+**Facts before advice.** Do not suggest anything until Step 6, when the looking
+is done. Once you have proposed a change, everything afterwards defends that
+proposal and the lecturer loses the chance to see their own material plainly.
+If they ask for suggestions early, say you will get there and finish looking
+first.
+
+**Never delete what you cannot see.** The best part of most lectures is not in
+the file. Ask before touching anything.
+
+**Label every statement.** Three kinds, and never blur them:
+
+| Label | Means |
+|---|---|
+| **measured** | the script counted it, or it is quoted from the material |
+| **inferred** | you worked it out by reading; it could be wrong |
+| **assumed** | you needed it and did not have it, so you guessed — this becomes a question |
+
+A reader must be able to tell at a glance which of your sentences would survive
+if you were wrong about the subject. Anything **assumed** goes in the question
+table in Step 8 rather than being quietly resolved.
+
+---
+
+## Step 1 — What is this session for?
+
+Before counting anything, answer two questions and say where the answer came
+from.
+
+**The topic.** One sentence. What is this session about?
+
+**The core objective.** What should a student be able to *do* afterwards that
+they could not do before? Not "understand cost behaviour" — that cannot be
+observed. Something like "decide whether a fitted cost function may be used at
+a given activity level, and say why not."
+
+For each, say whether it is **measured** (stated on a slide, in the syllabus,
+in a learning-outcomes list) or **inferred** (you worked it out from the
+content). If the material never states an objective anywhere, **say so
+plainly** — that is a finding in itself, and a common one. Material with no
+stated objective is usually organised around topics rather than around what
+changes in the student, and everything downstream follows from that.
+
+If several objectives are in play, name the one the session is really built
+around and say which others are along for the ride.
+
+## Step 2 — Count what is in the file
+
+Run the bundled script rather than reading and estimating. It handles
+PowerPoint, PDF, LaTeX or beamer, notebooks, and whole folders.
+
+```
+python scripts/read_material.py "their lecture.pptx"
+python scripts/read_material.py lecture.pdf          # needs pypdf
+python scripts/read_material.py slides.tex           # beamer overlays count as builds
+python scripts/read_material.py ./course_repo
+```
+
+For a **deck in any of the three formats** it reports: how many slides are
+repeats of the slide before, how many are genuinely different, words per slide
+and which slides are doing a document's job, every question written on a slide,
+speaker-note coverage sorted by whether a note is teachable narration or a
+private reminder, pictures and builds.
+
+For a **notebook** it reports the number that matters in a hands-on course:
+what share of the code cells the student actually writes. Zero means a
+demonstration to watch, which is fine on purpose and a problem if it was meant
+to be an exercise.
+
+Two things to respect in its output:
+
+- It prints a list of slides it **could not judge**, usually because the
+  content is a picture. Pass those to the lecturer as questions, never resolve
+  them by guessing.
+- On a scanned PDF with no text layer it will say so. Then do not use the
+  script — read the PDF directly and say that your counts are by eye.
+
+**If you cannot run it.** Some setups have no Python, and `.pdf` additionally
+needs `pypdf`. Do not stop, and do not pretend. Count by hand from the material,
+and then **label every one of those numbers `inferred` rather than `measured`**,
+using the three-way labelling above. Say in one line that the script could not
+be run and which counts are therefore estimates.
+
+A lecturer with an estimated audit still learns something. A lecturer given
+estimates dressed as measurements learns something false.
+
+Anything the script did not measure is **inferred** from here on.
+
+## Step 3 — What the subject requires
+
+Now bring in what you know about the topic, so that the critique in Step 4 has
+something to measure against.
+
+Produce a short list — five or six items — of what a student actually needs in
+order to use this topic in practice. For each, mark whether the material
+**covers it**, **assumes it**, or **misses it**. Include:
+
+- the ideas a practitioner uses this topic *for*, not just the mechanics
+- the mistakes people habitually make with it
+- what a professional body or the course's own textbook would expect
+- what the topic is a prerequisite *for*, later in the programme
+
+**The hard rule for this step.** Anything you say about the subject that is not
+in the material is a claim you are making, and it must be marked **inferred**.
+If you cite a standard, a textbook, a paper or a professional requirement, you
+must have actually opened it — never produce a citation you have not read.
+Where a claim matters and you are not certain, do not soften it into plausible
+prose: put it in the question list instead. The `verify-claims` skill exists
+for checking this kind of assertion.
+
+Prefer the material's own references. If the deck names a textbook chapter, its
+expectations are evidence, not your recollection.
+
+## Step 4 — Read it from the student's side
+
+The heart of the audit. Read the whole thing again as somebody who does not yet
+know the answer, and who has only the file — no lecturer in the room.
+
+Work through these, and answer with slide numbers:
+
+1. **Could I answer the questions on these slides from what I have been
+   given?** A question with no way to answer is a statement with a question
+   mark on it.
+2. **What am I assumed to already know?** List it. For each, where in the
+   programme would I have met it, and does anything here remind me? Unstated
+   prerequisites are the commonest reason a good lecture loses people.
+3. **Where would I first get lost?** Name the slide. Not the hardest slide —
+   the first one that stops being followable.
+4. **What can I do at the end that I could not do at the start?** Compare that
+   honestly with the core objective from Step 1. If they do not match, that is
+   the single most important finding in the whole audit.
+5. **Which parts am I watching, and which am I doing?** Count the minutes of
+   each if you can.
+6. **Where does anything tell me I am wrong?** Material with no way to be wrong
+   gives a student no way to find out that they are.
+7. **What is on the slide that I cannot read and listen to at once?** Use the
+   density numbers. A slide over about sixty words is a handout being
+   projected: the student either reads it or listens, and will do neither well.
+8. **If I missed this session, what could I recover from the file?** That is
+   what the speaker-note coverage measures.
+
+Write this as findings, not as advice. "Slide 13 asks which range to choose,
+and no numbers appear anywhere on it" — not "consider adding numbers".
+
+## Step 5 — Sort the objectives by what AI already does
+
+List the learning objectives inferable from the material. For each, answer one
+question: **could a student with a current AI assistant produce a passing
+answer in under five minutes?** Yes, partly, or no.
+
+Give a table: objective, which slides cover it, how many different slides that
+is, and the answer. Then state the ratio — how many slides serve the "yes"
+objectives against the "no" ones. In most material it is lopsided, and that one
+number usually carries the whole argument for change.
+
+## Step 6 — Now propose changes, numbered
+
+Only now. **Number every finding**, because the lecturer is going to mark each
+one and `course-rebuild` will work from the numbers.
+
+For each: which parts it affects, one of keep / edit / merge / remove / replace
+with an activity, one sentence of why, and how many minutes it adds or saves.
+Sort with the biggest difference to student learning first.
+
+Five rules that override everything else:
+
+- **Do not drop a topic.** The syllabus has to be covered. Compress, do not cut.
+- **Do not touch what the lecturer told you happens in class but is not in the
+  file.** Protect it, and write it down so it stops being invisible.
+- **Total time must not go up.** Add fifteen minutes of activity, find fifteen.
+- **Say what the lecturer must decide.** Anything touching a grade, or whether
+  a wrong answer is one real students give, is theirs.
+- **Assume every student has an AI assistant.** Never propose a change whose
+  only protection is a rule telling students not to use one.
+
+## Step 7 — Hand it over for a verdict
+
+An audit nobody agreed to is a list of complaints. End by asking the lecturer
+to mark **every numbered finding** with one of three words:
+
+| | |
+|---|---|
+| **accept** | worth doing; `course-rebuild` may act on it |
+| **reject** | not worth doing, or wrong. It will not be proposed again |
+| **change** | the problem is real but the fix is not — say what would be right |
+
+Present it as a short table they can answer in five minutes, not a form.
+Something they can reply to with "1 accept, 2 reject, 3 change — the Amazon
+slide stays, I always tell that story".
+
+Three rules for this step:
+
+- **Record the reason for every rejection**, in their words. A rejection with a
+  reason is a decision a colleague can read later; one without looks like an
+  oversight and gets re-proposed for ever.
+- **Do not argue.** If a rejection looks like a mistake, say so once, in one
+  sentence, and accept the answer. They know the room.
+- **Rejections are the most useful thing this skill collects.** If several
+  lecturers reject the same kind of suggestion, that is a defect in the skill,
+  not in them.
+
+Pass on to `course-rebuild`: the accepted findings with their numbers, the
+"change" ones with what the lecturer said instead, the rejected ones **so they
+are not raised again**, and the answers to any of Step 8's assumptions
+they corrected.
+
+## Step 8 — Last: what you had to assume
+
+Everything you marked **assumed**, plus anything the script refused to judge,
+becomes a question. **They go here, at the end, after the findings.** A lecturer
+who opens an audit and meets a questionnaire has been handed homework, not an
+audit — and the same questions read completely differently once the findings
+they came from are already on the page.
+
+**Put them in a table. Never in prose.** Ten questions written as paragraphs is
+a wall; ten rows is a minute's work. This is the single biggest thing you can do
+to make the list answerable:
+
+| # | I assumed | Because | If I'm wrong |
+|---|---|---|---|
+| 1 | a 90-minute session | 41 distinct slides, no timing stated anywhere | every timing in the change list shifts |
+| 2 | the exam is yours to change | nothing says it is shared across sections | finding 4 becomes a proposal for whoever owns it |
+| 3 | slide 19's chart shows the relevant range | the script could not read the image | finding 3 may be wrong entirely |
+
+The three columns do different jobs and all three are needed. **I assumed** is
+what you did so the work could continue. **Because** is your evidence, so they
+can judge whether it was reasonable without re-reading the deck. **If I'm
+wrong** is what it costs — and that is the column that tells them whether the
+row is worth answering at all.
+
+**Sort by the last column.** The assumption that changes the most goes first.
+
+Rules for the table:
+
+- **Never ask what you could measure.** If the script can count it, count it.
+- **Ten at most**, ordered by how much the answer moves the audit. A list of
+  thirty gets none of them answered.
+- **If the "if I'm wrong" cell is empty, delete the row.** An assumption whose
+  answer changes nothing is not worth their attention.
+- **One line per cell.** If a cell needs a paragraph, the row is really a
+  finding and belongs in Step 6.
+- Under the table, name the single one you would most like answered if they
+  answer only one. Usually: *what do you do in class that is not on the slides?*
+
+Three kinds of answer sit in that table, and it is worth knowing which you are
+asking for, because they come from different places in a lecturer's head: a
+**fact** they happen to know, an **observation** only they can report about the
+room, or a **decision** only they can settle. Say which in the "Because" cell
+where it is not obvious. Do not group the table by them — that sorts the
+questions for the person writing them, not the person answering them.
+
+## How to lay it out
+
+The order above is the order you worked in. It is not the order to hand over.
+**Lead with the verdict, then the evidence, then the detail** — a lecturer
+should know what you are going to say before they have to read why you say it.
+
+**Aim for about 800 words, and put most of it in tables.** That is not a tight
+budget, it is a generous one: four sentences, four bullets, and two tables come
+to roughly 750 even for a long lecture with ten findings. If you are past it,
+you are writing paragraphs where a row would do, and a paragraph is the thing
+nobody reads. Four sections, in this order:
+
+**The short version.** Four sentences. What the session does well, what is
+wrong with it, how many changes you are proposing, and the net effect on time.
+No preamble, no hedging, no restating the brief back at them.
+
+**The three facts behind that.** Three or four bullets, measured numbers only.
+This is where Step 2's counts go. It is the evidence for the paragraph above,
+and without it the changes read as taste rather than as findings.
+
+**The changes.** The numbered table from Step 6, with an empty verdict column.
+One line per cell, biggest difference to student learning first.
+
+**What I had to assume.** The table from Step 8, last, so that it reads as a
+correction sheet rather than as a form to fill in before anything can happen.
+
+Three things must survive whatever else you cut: **every finding is numbered**,
+**every number says whether it was measured or inferred**, and **the verdict
+column is empty and obvious**, so that replying is a one-line job.
+
+## Common failures
+
+- Suggesting improvements in Step 2. Reread the first rule.
+- Blurring measured and inferred, so the lecturer cannot tell which findings
+  survive if you misunderstood the subject.
+- Inventing what the subject requires, or citing something you have not opened.
+- Answering your own uncertainty instead of asking. An assumption disappears
+  into the finished work; a question does not.
+- Quietly dropping a topic to save time. Check your change list against the
+  syllabus before showing it.
+- Turning a live demonstration into a static slide, because a slide is easier
+  to produce.
+- Writing in your own voice rather than the lecturer's. Draft the tables; leave
+  the spoken lines to them.
+- Handing over unnumbered findings, so nothing can be accepted or rejected.
+- Opening with the questions instead of the findings, so the lecturer meets
+  a questionnaire before they meet a single thing you learned.
+- Writing the assumptions as prose. Ten paragraphs is a wall; ten rows is a
+  minute.
+- Arguing with a rejection instead of recording it.

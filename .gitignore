@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+
+# Built on every run and attached to a GitHub Release instead of committed,
+# so a 60 KB binary does not land in the history each time the skill changes.
+zips/
+
+# Local working files that are not part of the package
+AI_class-workflow-kit.zip
+building-ai-class.md
+
+desktop.ini
+.DS_Store
+Thumbs.db
